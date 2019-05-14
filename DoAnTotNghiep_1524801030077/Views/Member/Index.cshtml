@@ -1,0 +1,485 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right ">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Quản lí</a></li>
+                        <li class="breadcrumb-item active">Thành viên</li>
+                    </ol>
+                </div>
+                <h4 class="page-title"><small class="fa fa-door-open"></small>Thành viên</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+</div>
+<div class="col-xl-12">
+    <div class="card-box">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a href="#home" data-toggle="tab" aria-expanded="false" class="nav-link active">
+                    Vai trò
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#profile" data-toggle="tab" aria-expanded="true" class="nav-link ">
+                    Thành viên
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane  show active" id="home">
+                <div class="card-box p-2">
+
+                    <div class="row pl-2">
+                        <!--filter action-->
+                        <form class="form-inline">
+                            <div class="form-group mb-1 mr-1 ">
+                                <button type="button" onclick="CreateCate()" class="btn btn-sm btn-success waves-effect waves-light mb-1"><i class="fa fa-plus mr-1"></i>Thêm vai trò</button>
+                            </div>
+                        </form>
+                    </div><!--end filter action-->
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-1 dt-bootstrap4 no-footer" id="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col" width="1">#</th>
+                                    <th scope="col" class="resizeable">Mã vai trò</th>
+                                    <th scope="col" class="resizeable">Tên vai trò</th>
+                                    <th style="text-align:center" scope="col">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="tab-pane" id="profile">
+                <div class="card-box p-2">
+
+                    <div class="row pl-2">
+                        <!--filter action-->
+                        <form class="form-inline">
+                            <div class="form-group mb-1 mr-1 ">
+                                <button type="button" onclick="CreateDetail()" class="btn btn-sm btn-success waves-effect waves-light mb-1"><i class="fa fa-plus mr-1"></i>Thêm thành viên</button>
+                            </div>
+                        </form>
+                    </div><!--end filter action-->
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-1 dt-bootstrap4 no-footer" id="tableDetail">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col" width="1">#</th>
+                                    <th scope="col" class="resizeable">Mã số giảng viên</th>
+                                    <th scope="col" class="resizeable">Tên</th>
+                                    <th scope="col" class="resizeable">Vai trò</th>
+                                    <th scope="col" class="resizeable">Ngày sinh</th>
+                                    <th scope="col" class="resizeable">Giới Tính</th>
+                                    <th style="text-align:center" scope="col">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div> <!-- end card-box-->
+</div> <!-- end col -->
+<!--Modal-->
+<div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title" id="exampleModalLabel">Vai trò</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="modalEdit" id="modalEdit" data-toggle="validator" role="form">
+                    <div class="form-group ">
+                        <label for="Code">Mã vai trò</label>
+                        <input type="text" class="form-control" id="Code" name="Code" parsley-trigger="change" placeholder="Nhập mã vai trò..." />
+                    </div>
+                    <div class="form-group ">
+                        <label for="Name">Tên vai trò</label>
+                        <input type="text" class="form-control" id="Name" name="Name" parsley-trigger="change" placeholder="Nhập tên vai trò..." />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" id="Save" class="btn btn-primary">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title" id="exampleModalLabel">Thành viên</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="modalEditGroup" id="modalEditGroup">
+                    <div class="form-group">
+                        <label for="CodeDetail">Mã số giảng viên</label>
+                        <input type="text" id="CodeDetail" class="form-control" placeholder="Nhập mã giảng viên">
+                    </div>
+                    <div class="form-group">
+                        <label for="FullName">Tên giảng viên</label>
+                        <input type="text" id="FullName" class="form-control" placeholder="Nhập tên giảng viên">
+                    </div>
+                    <div class="form-group">
+                        <label for="USER">Email</label>
+                        <input type="email" id="USER" class="form-control" placeholder="Nhập email">
+                    </div>
+                    <div class="form-group">
+                        <label for="Role">Vai trò</label>
+                        <select id="Role" data-live-search="true" data-style="btn-light"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="DayOfBirth">Ngày sinh</label>
+                        <input type="text" id="DayOfBirth" class="form-control flatpickr-input active " placeholder="Nhập ngày sinh" readonly="readonly">
+                    </div>
+                    <div class="form-group">
+                        <label for="PASSWORD">Mật khẩu</label>
+                        <input type="PASSWORD" id="PASSWORD" class="form-control" placeholder="Nhập mật khẩu">
+                    </div>
+                    <div class="form-group">
+                        <label>Giới tính</label>
+                        <div style="margin-left:5%" class="row">
+                            <div class="radio radio-success">
+                                <input type="radio" name="Sex" id="male" value="1">
+                                <label for="male">
+                                    Nam
+                                </label>
+                            </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div style="margin-left:10%" class="col-lg-pull-1 radio radio-danger">
+                                <input type="radio" name="Sex" id="female" value="0">
+                                <label for="female">
+                                    Nữ
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" id="SaveDetail" class="btn btn-primary">Hoàn thành</button>
+                <button type="button" id="ApplyDetail" class="btn btn-primary">Áp dụng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+        var tableCate;
+        var tableDetail;
+        //$("#create").on("hidden.bs.modal", function () {
+        //    //$("#cateName").val("");
+        //});
+        //$("#createDetailModal").on("hidden.bs.modal", function () {
+        //    //ResetDetail();
+        //});
+        //function ResetDetail() {
+        //    editor.setContents([{ insert: '\n' }]);
+        //    $("#cateSelect").selectpicker('refresh');
+        //    $("#hourNumber").val('');
+        //}
+        $(document).ready(function () {
+            getselect2role("#Role");
+            tableCate = InitTable("#table");
+            tableDetail = InitTable("#tableDetail");
+            $("#DayOfBirth").flatpickr({
+                enableTime: true,
+                dateFormat: "d-m-Y "
+            });
+            GetAllCate();
+            GetAllDetail();
+        });
+        function GetAllDetail() {
+            $.ajax({
+                url: '/Member/GetAllDetail',
+                method: 'Post'
+            }).done(function (data) {
+                //console.log(data.returnData)
+                ShowListDetail(data.returnData)
+            });
+        }
+        function CreateDetail() {
+            $("#CodeDetail").removeAttr('disabled');
+            $('#createDetailModal').modal('show')
+            $("#SaveDetail").attr('onclick', 'SaveDetail(0)')
+            $("#ApplyDetail").attr('onclick', 'SaveDetail(1)')
+        }
+        function SaveDetail(status) {
+            //if ($('#modalEdit').validator()) {
+            //    aler("a");
+            //    return;
+            //}
+            //else {
+            //    aler("b");
+            //    return;
+            //}
+            var radioValue = $("input[name='Sex']:checked").val();
+            $.ajax({
+                url: '/Member/SaveDetail',
+                method: 'Post',
+                data: {
+                    'Code': $("#CodeDetail").val(),
+                    'DayOfBirth': ConvertDate($("#DayOfBirth").val()),
+                    'FullName': $("#FullName").val(),
+                    'Role': $("#Role").val(),
+                    'Sex': radioValue,
+                    'PASSWORD': $("#PASSWORD").val(),
+                    'USER': $("#USER").val()
+                }
+            }).done(function (data) {
+                console.log(data)
+                if (data.returnData == true) {
+                    if (status == 1) {
+                        ResetDetail();
+                    }
+                    else {
+                        $('#createDetailModal').modal('hide');
+                    }
+                    ShowListDetail(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+        function ShowListDetail(data) {
+            tableDetail.clear().draw();
+            for (let i = 0; i < data.length; i++) {
+                const node = tableDetail.row.add([
+                    i + 1,
+                    data[i]["msgv"],
+                    data[i]["fullName"],
+                    data[i]["role"],
+                    moment(data[i]["dateofbirth"]).format("DD-MM-YYYY"),
+                    data[i]["gioitinh"],
+                    ` <center class="pt-1">
+                                <i style="cursor:pointer" onclick='EditDetail(${data[i]["pid"]})' class="fas fa-edit text-danger ml-1" data-toggle="tooltip" data-placement="top" title="Sửa"></i>
+                                <i  style="cursor:pointer" onclick='DeleteDetail(${data[i]["pid"]})' class="fas fa-trash text-danger ml-1" data-toggle="tooltip" data-placement="top" title="Xóa"></i>
+                               </center>`
+                ]).draw().node();
+                $(node).find("td").eq(0).addClass("text-center");
+                //$(node).find("td").eq(1).addClass("text-center");
+                //$(node).find("td").eq(2).addClass("text-center");
+            }
+        }
+        function EditDetail(id) {
+            $("#SaveDetail").attr('onclick', 'UpdateDetail(' + id + ')')
+            $.ajax({
+                method: 'POST',
+                url: '/Member/EditDetail',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+                console.log(data.returnData);
+                $("#DayOfBirth").val(moment(data.returnData.DayOfBirth).format("DD-MM-YYYY"));
+                $("#Role").val(data.returnData.Role).change();
+                $("#CodeDetail").val(data.returnData.Code);
+                $("#CodeDetail").attr('disabled', 'true');
+
+                $("#USER").val(data.returnData.USER);
+                $("#FullName").val(data.returnData.FullName);
+                $("#PASSWORD").val('********');
+                if (data.returnData.Sex == '1') {
+                    $("#male").attr('checked', 'true');
+                }
+                else { $("#female").attr('checked', 'true'); }
+
+                $('#createDetailModal').modal('show');
+                //$("#Hour").val();
+            });
+        }
+        function UpdateDetail(id) {
+            $.ajax({
+                url: '/Member/UpdateDetail',
+                method: 'POST',
+                data: {
+                    'DayOfBirth': $("#DayOfBirth").val(),
+                    'FullName': $("#FullName").val(),
+                    'Role': $("#Role").val(),
+                    'Sex': radioValue,
+                    'PASSWORD': $("#PASSWORD").val(),
+                    'USER': $("#USER").val(),
+                    'Pid': id
+                }
+            }).done(function (data) {
+                if (data.returnData == true) {
+                    $('#createDetailModal').modal('hide');
+                    ShowListDetail(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+        function DeleteDetail(id) {
+            $.ajax({
+                url: '/Member/DeleteDetail',
+                method: 'POST',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+                if (data.returnData == true) {
+
+                    $('#create').modal('hide');
+                    //$("#table>tbody").empty();
+                    ShowListDetail(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+
+
+
+
+
+        function GetAllCate() {
+            $.ajax({
+                url: '/Member/GetAllCate',
+                method: 'Post'
+            }).done(function (data) {
+                console.log(data)
+                ShowList(data.returnData)
+            });
+        }
+
+        function CreateCate() {
+
+            $('#create').modal('show')
+            $("#Save").attr('onclick', 'SaveCate()')
+            $("#Code").attr("disabled", "false");
+        }
+        function SaveCate() {
+            $.ajax({
+                url: '/Member/SaveCate',
+                method: 'Post',
+                data: {
+                    'Code': $("#Code").val(),
+                    'Name': $("#Name").val()
+                }
+            }).done(function (data) {
+                console.log(data)
+                if (data.returnData == true) {
+                    $('#create').modal('hide');
+                    ShowList(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+        function ShowList(data) {
+            tableCate.clear().draw();
+            for (let i = 0; i < data.length; i++) {
+                const node = tableCate.row.add([
+                    i + 1,
+                    data[i]["Code"],
+                    data[i]["Name"],
+                    ` <center class="pt-1">
+                                <i style="cursor:pointer" onclick='EditCate(${data[i]["Pid"]})' class="fas fa-edit text-danger ml-1" data-toggle="tooltip" data-placement="top" title="Sửa"></i>
+                                <i  style="cursor:pointer" onclick='DeleteCate(${data[i]["Pid"]})' class="fas fa-trash text-danger ml-1" data-toggle="tooltip" data-placement="top" title="Xóa"></i>
+                               </center>`
+                ]).draw().node();
+                $(node).find("td").eq(0).addClass("text-center");
+                //$(node).find("td").eq(1).addClass("text-center");
+                //$(node).find("td").eq(2).addClass("text-center");
+            }
+        }
+        function EditCate(id) {
+            $("#Save").attr('onclick', 'UpdateCate(' + id + ')')
+            $.ajax({
+                method: 'POST',
+                url: '/Member/EditCate',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+                console.log(data.returnData);
+                $("#Code").attr("disabled", "true");
+                $("#Code").val(data.returnData.Code);
+                $("#Name").val(data.returnData.Name);
+                $('#create').modal('show');
+                //$("#Hour").val();
+            });
+        }
+        function UpdateCate(id) {
+            $.ajax({
+                url: '/Member/UpdateCate',
+                method: 'POST',
+                data: {
+                    'Name': $("#Name").val(),
+                    'Pid': id
+                }
+            }).done(function (data) {
+                if (data.returnData == true) {
+                    $('#create').modal('hide');
+                    ShowList(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+        function DeleteCate(id) {
+            $.ajax({
+                url: '/Member/DeleteCate',
+                method: 'POST',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+                if (data.returnData == true) {
+
+                    $('#create').modal('hide');
+                    //$("#table>tbody").empty();
+                    ShowList(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+
+
+    </script>
+}
+
+

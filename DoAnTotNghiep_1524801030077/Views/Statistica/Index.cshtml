@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@{
+    ViewBag.Title = "Index";
+}
+<link href="~/assets/libs/datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="~/assets/libs/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right ">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Quản lí</a></li>
+                        <li class="breadcrumb-item active">Thống kê</li>
+                    </ol>
+                </div>
+                <h4 class="page-title"><small class="fa fa-door-open"></small>Thống kê</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+</div> <!-- container -->
+@*<div class="col-12" id="list">
+        @Html.Partial("List")
+    </div>*@
+<!--LIst-->
+<div class="card-box p-2">
+
+    @if (Session["UserRole"].ToString() == "Admin")
+    {
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="text-left" id="nestable_list_menu">
+                    <select id="userSelect" data-live-search="true" data-width="50%" data-style="btn-light"></select>
+                </div>
+            </div> <!-- end col -->
+        </div>
+        <br />
+    }
+    <div class="row pl-2">
+        <!--filter action-->
+        <form class="form-inline">
+            <div class="form-group mb-1 mr-1 ">
+                <div class="small mr-1 mb-1" id="week">
+
+                </div>
+                <input type="number" id="year" class="form-control form-control-sm mb-1 mr-0" placeholder="Nhập năm"> &nbsp;
+
+                @if (Session["UserRole"].ToString() == "Admin")
+                {
+
+                    <button type="button" onclick="PrintAdmin()" class="btn btn-sm btn-success waves-effect waves-light mb-1"><i class="fa fa-table mr-1"></i>Xuất thống kê</button>
+                }
+                else
+                {
+                    <button type="button" onclick="Print()" class="btn btn-sm btn-success waves-effect waves-light mb-1"><i class="fa fa-table mr-1"></i>Xuất thống kê</button>
+
+                }
+            </div>
+        </form>
+    </div><!--end filter action-->
+
+
+</div>
+
+
+@section scripts{
+
+
+    <script type="text/javascript">
+            function Print() {
+                var year = $("#year").val();
+                location.href = '@Url.Action("PrintThongKe", "Statistica")?year=' + year;
+            }
+                 function PrintAdmin() {
+                     var year = $("#year").val();
+                     var code = $("#userSelect").val();
+                location.href = '@Url.Action("PrintThongKeAdmin", "Statistica")?year=' + year+'&code='+code;
+            }
+
+
+
+
+            $(document).ready(function () {
+                var today = new Date();
+
+                var yyyy = today.getFullYear();
+                $("#year").val(yyyy);
+                getselect2User("#userSelect");
+                //Getall();
+
+
+            });
+
+
+
+
+    </script>
+}
+
+
+
+
+
+
+
+

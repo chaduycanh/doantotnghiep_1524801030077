@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DOANTOTNGHIEPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Attendance">
+    <Key>
+      <PropertyRef Name="Pid" />
+    </Key>
+    <Property Name="Pid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TeacherCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="int" />
+    <Property Name="ActiveCode" Type="bigint" />
+    <Property Name="Lock" Type="int" />
+  </EntityType>
+  <EntityType Name="ExtratimeActive">
+    <Key>
+      <PropertyRef Name="PID" />
+    </Key>
+    <Property Name="PID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Date" Type="datetime" />
+    <Property Name="Content" Type="nvarchar(max)" />
+    <Property Name="Hour" Type="nvarchar" MaxLength="12" />
+    <Property Name="Participant" Type="nvarchar(max)" />
+    <Property Name="Location" Type="nvarchar" MaxLength="258" />
+    <Property Name="KindActive" Type="bigint" />
+  </EntityType>
+  <EntityType Name="PersonalExtratimeActive">
+    <Key>
+      <PropertyRef Name="Pid" />
+    </Key>
+    <Property Name="Pid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Content" Type="nvarchar(max)" />
+    <Property Name="Date" Type="datetime" />
+    <Property Name="Time" Type="nvarchar" MaxLength="8" />
+    <Property Name="Location" Type="nvarchar" MaxLength="512" />
+    <Property Name="Proof" Type="nvarchar" MaxLength="128" />
+    <Property Name="KindActive" Type="bigint" />
+    <Property Name="TeacherCode" Type="nvarchar" MaxLength="50" />
+    <Property Name="Status" Type="int" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Pid" />
+    </Key>
+    <Property Name="Pid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserLogin">
+    <Key>
+      <PropertyRef Name="PID" />
+    </Key>
+    <Property Name="PID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="USER" Type="varchar" MaxLength="24" Nullable="false" />
+    <Property Name="PASSWORD" Type="varchar" MaxLength="128" />
+    <Property Name="TOKEN" Type="varchar" MaxLength="64" />
+    <Property Name="IPLOGIN" Type="varchar" MaxLength="24" />
+    <Property Name="STATUS" Type="bigint" />
+    <Property Name="SALT" Type="varchar" MaxLength="128" />
+    <Property Name="Role" Type="nvarchar" MaxLength="50" />
+    <Property Name="FullName" Type="nvarchar" MaxLength="258" />
+    <Property Name="DayOfBirth" Type="datetime" />
+    <Property Name="Country" Type="nvarchar" MaxLength="258" />
+    <Property Name="CID" Type="nvarchar" MaxLength="128" />
+    <Property Name="Sex" Type="int" />
+    <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WorkingDefine">
+    <Key>
+      <PropertyRef Name="Pid" />
+    </Key>
+    <Property Name="Pid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CatePid" Type="bigint" />
+    <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Value" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WorkingDefineCate">
+    <Key>
+      <PropertyRef Name="Pid" />
+    </Key>
+    <Property Name="Pid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NameCate" Type="nvarchar" MaxLength="256" />
+  </EntityType>
+  <EntityContainer Name="DOANTOTNGHIEPModelStoreContainer">
+    <EntitySet Name="Attendance" EntityType="Self.Attendance" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ExtratimeActive" EntityType="Self.ExtratimeActive" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PersonalExtratimeActive" EntityType="Self.PersonalExtratimeActive" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserLogin" EntityType="Self.UserLogin" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WorkingDefine" EntityType="Self.WorkingDefine" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WorkingDefineCate" EntityType="Self.WorkingDefineCate" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

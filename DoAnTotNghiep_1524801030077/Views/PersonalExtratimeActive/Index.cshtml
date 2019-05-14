@@ -1,0 +1,448 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@{
+    ViewBag.Title = "Index";
+}
+@*<link href="/assets/libs/dropzone/dropzone.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/libs/dropify/dropify.min.css" rel="stylesheet" type="text/css" />*@
+@*<link href="~/assets/libs/mdboottrap/css/mdb.min.css" rel="stylesheet" />*@
+@*<link href="~/assets/libs/mdboottrap/css/style.css" rel="stylesheet" />*@
+
+
+<link href="~/assets/libs/datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="~/assets/libs/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right ">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Function</a></li>
+                        <li class="breadcrumb-item active">Nhập hoạt động ngoài giờ</li>
+                    </ol>
+                </div>
+                <h4 class="page-title"><small class="fa fa-door-open"></small>Nhập hoạt động ngoài giờ</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+</div> <!-- container -->
+@*<div class="col-12" id="list">
+        @Html.Partial("List")
+    </div>*@
+<!--LIst-->
+<div class="card-box p-2">
+
+    <div class="row pl-2">
+        <!--filter action-->
+        <form class="form-inline">
+            <div class="form-group mb-1 mr-1 ">
+                <div class="small mr-1 mb-1" id="week">
+
+                </div>
+                @*<select class="small mr-1 mb-1" data-plugin="customselect">
+                        <option selected>—All</option>
+                        <option value="2">active</option>
+                        <option value="3">inactive</option>
+                    </select>
+                    <input type="search" class="form-control form-control-sm mb-1 mr-0" placeholder="Keyword search">*@
+                @*<button type="button" class="btn btn-sm btn-light waves-effect waves-light mb-1 mr-1"><i class="fa fa-search"></i></button>*@
+                @*<button type="button" onclick="Create()" class="btn btn-sm btn-success waves-effect waves-light mb-1"><i class="fa fa-plus mr-1"></i>Tạo hoạt động</button>*@
+                <button type="button" onclick="Create()" class="btn btn-sm btn-success waves-effect waves-light mb-1"><i class="fa fa-plus mr-1"></i>Thêm hoạt động</button>
+            </div>
+        </form>
+    </div><!--end filter action-->
+    <div class="table-responsive">
+        <table class="table table-hover mb-1 dt-bootstrap4 no-footer" id="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" width="1">#</th>
+                    <th style="text-align:center" scope="col" class="resizeable">Ngày</th>
+                    <th style="text-align:center" scope="col" class="resizeable">Giờ</th>
+                    <th style="text-align:center" scope="col" class="resizeable">Nội dung</th>
+                    <th style="text-align:center" scope="col" class="resizeable">Địa điểm</th>
+                    <th style="text-align:center" scope="col">Minh chứng</th>
+                    <th style="text-align:center" scope="col">Trạng thái</th>
+                    <th style="text-align:center" scope="col">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+
+</div>
+<!--Modal-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title" id="exampleModalLabel">Nhập thông tin ngoài giờ</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group ">
+                    <label>Thời gian</label>
+                    <input type="text" id="Date" class="form-control flatpickr-input active " placeholder="Nhập ngày" readonly="readonly">
+                </div>
+                <div class="form-group">
+                    <div class="input-group clockpicker">
+                        <input id="Hour" placeholder="Nhập giờ" type="text" class="form-control">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="mdi mdi-clock-outline"></i></span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label for="Content">Nội dung</label>
+                    <div id="content" style="height: 100px;"></div>
+                </div>
+                <div class="form-group">
+                    <select id="cateSelect" data-live-search="true" data-style="btn-light"></select>
+                </div>
+                <div class="form-group">
+                    <label for="Location">Địa điểm</label>
+                    <input type="text" class="form-control" id="location" name="location" parsley-trigger="change" placeholder="Nhập địa điểm..." />
+                </div>
+
+                <div class="form-group" id="divProoffile">
+                    <label for="proofFile">Minh chứng</label>
+                    <input class="form-control" name="proofFile" id="proofFile" type="file" multiple />
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" id="Save" class="btn btn-primary">Lưu</button>
+                <button type="button" id="ApplyDetail" class="btn btn-success">Áp dụng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="fielUploadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title" id="exampleModalLabel">Quản lí file</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group" id="divfileManagerment">
+                    <label for="Location">File minh chứng</label>
+                    <div class="file-loading">
+                        <label>Preview File Icon</label>
+                        <input id="fileUpload" type="file" multiple>
+                    </div>
+                </div>
+            </div>
+            @*<div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" id="Save" class="btn btn-primary">Lưu</button>
+                    <button type="button" id="ApplyDetail" class="btn btn-success">Áp dụng</button>
+                </div>*@
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- JavaScript -->
+@*<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" crossorigin="anonymous">*@
+
+@*<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>*@
+<link href="~/assets/libs/FileMultiUpload/css/fileinput.css" rel="stylesheet" />
+<link href="~/assets/libs/FileMultiUpload/themes/explorer-fas/theme.css" rel="stylesheet" />
+@*<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>*@
+
+@*<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">*@
+<link href="~/Scripts/cdn/all.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+
+
+
+
+@section scripts{
+
+    <script src="~/assets/libs/FileMultiUpload/js/plugins/piexif.js"></script>
+    <script src="~/assets/libs/FileMultiUpload/js/plugins/sortable.js"></script>
+    <script src="~/assets/libs/FileMultiUpload/js/fileinput.js"></script>
+    <script src="~/assets/libs/FileMultiUpload/js/locales/fr.js"></script>
+    <script src="~/assets/libs/FileMultiUpload/js/locales/es.js"></script>
+    <script src="~/assets/libs/FileMultiUpload/themes/fas/theme.js"></script>
+    <script src="~/assets/libs/FileMultiUpload/themes/explorer-fas/theme.js"></script>
+
+    <script type="text/javascript">
+        var Role;
+        //var tablePart;
+        $("#exampleModal").on("hidden.bs.modal", function () {
+            ResetModal();
+        });
+        function ResetModal() {
+            $("#exampleModal").find("input,textarea,select").val('').end();
+            editor.setContents([{ insert: '\n' }]);
+        }
+        var table;
+        //var a = ['Images/1111/9520191820832_1111.jpg;'];
+
+        function OpenFileManager(id) {
+            $.ajax({
+                url: '/PersonalExtratimeActive/GetFile',
+                method: 'POST',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+                //alert("a")
+                //c/*onsole.log(data);*/
+                var images = [];
+                images = data.returnData;
+                console.log(data.listImagesDetail);
+                console.log(images);
+                //fileUpload.initialPreview = a;
+                $("#fileUpload").val("");
+                $("#fileUpload").fileinput('destroy');
+                $("#fileUpload").fileinput({
+                    theme: 'fas',
+                    showUpload: true,
+                    showCaption: false,
+                    browseClass: "btn btn-primary btn-lg",
+                    fileType: "any",
+                    previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+                    overwriteInitial: false,
+                    initialPreviewAsData: true,
+                    initialPreview: images,
+                    initialPreviewConfig: data.listImagesDetail,
+                    uploadUrl: "/PersonalExtratimeActive/SaveFile?id="+id
+
+
+                });
+                //var plugin = $('#fileUpload').data('fileinput');
+                //plugin.initialPreview = a;
+                //console.log(plugin.initialPreview)
+                $("#fielUploadModal").modal('show');
+            });
+        }
+
+        $(document).ready(function () {
+            //InitUpload();
+            //select
+            table = InitTable("#table");
+            getselect2loaigiocongtac("#cateSelect");
+            //date
+            var today = new Date();
+            var yyyy = today.getFullYear();
+            var week = getWeekNumber(today);
+            var weekInput = `<input type="week" name="week" id="camp-week" class="form-control" value="${yyyy}-W${week[1]}" />`;
+            $("#week").append(weekInput);
+            $("#Date").flatpickr({
+                enableTime: true,
+                dateFormat: "d-m-Y "
+            });
+            $("#Hour").flatpickr({
+                enableTime: true,
+                noCalendar: true,
+                time_24hr: true,
+                dateFormat: "H:i",
+            });
+            $(".clockpicker").clockpicker({
+                donetext: "Done",
+                autoclose: true
+            });
+            Getall();
+            InitEditor("#content");
+
+        });
+        function Getall() {
+            $.ajax({
+                url: '/PersonalExtratimeActive/GetAll',
+                method: 'POST'
+            }).done(function (data) {
+                //console.log(data);
+                ShowList(data.jsData);
+            });
+        }
+        var listUser;
+        function Create() {
+
+            $('#exampleModal').modal('show')
+            $("#divProoffile").show();
+            $("#Save").attr('onclick', 'Save(0)')
+            $("#ApplyDetail").attr('onclick', 'Save(1)')
+        }
+
+        function Save(status) {
+            var fileUpload = $("#proofFile").get(0);
+            var files = fileUpload.files;
+            // Create FormData object
+            var fileData = new FormData();
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append('upload', files[i]);
+            }
+            fileData.append('Hour', $("#Hour").val());
+            fileData.append('Content', justTextContent);
+            fileData.append('Location', $("#location").val());
+            fileData.append('KindActive', $("#cateSelect").val());
+            fileData.append('Participant', JSON.stringify($("#Participant").val()));
+            fileData.append('Date', ConvertDate($("#Date").val()));
+            //var formData = new FormData();
+            //formData.append('upload', $("#proofFile")[0].files[0])
+            $.ajax({
+                url: '/PersonalExtratimeActive/Save',
+                method: 'POST',
+                contentType: false,
+                processData: false,
+                data: fileData
+            }).done(function (data) {
+                console.log(data);
+                if (data.returnData == true) {
+                    if (status == 0) {
+                        $('#exampleModal').modal('hide');
+                    }
+                    else {
+                        ResetModal();
+                    }
+                    ShowList(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+        function Edit(id) {
+
+            $("#Save").attr('onclick', 'Update(' + id + ')');
+            $("#divProoffile").hide();
+            $.ajax({
+                method: 'POST',
+                url: '/PersonalExtratimeActive/Edit',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+
+                //console.log(data);
+                var date = moment(data.returnData.Date).format("DD-MM-YYYY");
+                editor.setText(data.returnData.Content);
+
+                $("#Date").val(date);
+                $("#Hour").val(data.returnData.Time);
+                $("#location").val(data.returnData.Location);
+                //console.log(JSON.parse(data.returnData.Participant))
+                //var multiselect = JSON.parse(data.returnData.TeacherCode);
+                $("#cateSelect").val(data.returnData.KindActive).change();
+                $('#exampleModal').modal('show');
+
+                //$("#Hour").val();
+            });
+        }
+
+        function Update(id) {
+            $.ajax({
+                url: '/PersonalExtratimeActive/Update',
+                method: 'POST',
+                data: {
+                    'Date': ConvertDate($("#Date").val()),
+                    'Hour': $("#Hour").val(),
+                    'Content': justTextContent,
+                    'Location': $("#location").val(),
+                    'Id': id,
+                    'KindActive': $("#cateSelect").val(),
+                }
+            }).done(function (data) {
+                //console.log(data);
+                if (data.returnData == true) {
+                    $('#exampleModal').modal('hide');
+                    ShowList(data.jsData);
+                    $.toast({
+                        heading: 'Success',
+                        text: 'Thao tác thành công',
+                        showHideTransition: 'slide',
+                        icon: 'success',
+                        position: 'top-left'
+                    });
+                }
+            });
+        }
+        function Delete(id) {
+            $.ajax({
+                url: '/PersonalExtratimeActive/Delete',
+                method: 'POST',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+                if (data.returnData == true) {
+
+                    $('#exampleModal').modal('hide');
+                    $("#table>tbody").empty();
+                    ShowList(data.jsData);
+                    $.toast({
+                        heading: 'Success',
+                        text: 'Thao tác thành công',
+                        showHideTransition: 'slide',
+                        icon: 'success',
+                        position: 'top-left'
+                    });
+                }
+            });
+        }
+        function ShowList(data) {
+            table.clear().draw();
+            for (let i = 0; i < data.length; i++) {
+                var text = "";
+                if (data[i]["Status"] == -1) {
+                    text = `<span class="badge badge-danger">Không được duyệt</span>`
+                } else if (data[i]["Status"] == 0){
+                    text = `<span class="badge badge-warning">Đợi duyệt</span>`
+                } else if (data[i]["Status"] == 1) {
+                    text = `<span class="badge badge-success">Đã duyệt</span>`
+                }
+       
+                const node = table.row.add([
+                    i + 1,
+                    moment(data[i]["Date"]).format("DD-MM-YYYY"),
+                    data[i]["Time"],
+                    data[i]["Content"],
+                    data[i]["Location"],
+                    `<i style="cursor:pointer" onclick='OpenFileManager(${data[i]["Pid"]})' title="Quản lí tệp tin" class="far fa-images" style="font-size: 60px;"></i>`,
+                    text,
+                    ` <center class="pt-1">
+                                                        <i style="cursor:pointer" onclick='Edit(${data[i]["Pid"]})' class="fas fa-edit text-danger ml-1" data-toggle="tooltip" data-placement="top" title="Sửa"></i>
+                                                        <i style="cursor:pointer" onclick='Delete(${data[i]["Pid"]})' class="fas fa-trash text-danger ml-1" data-toggle="tooltip" data-placement="top" title="Xóa"></i>
+                                                    </center>`
+                ]).draw().node();
+                $(node).find("td").eq(0).addClass("text-center");
+                $(node).find("td").eq(1).addClass("text-center");
+                $(node).find("td").eq(2).addClass("text-center");
+                $(node).find("td").eq(3).addClass("text-center");
+                $(node).find("td").eq(4).addClass("text-center");
+                $(node).find("td").eq(5).addClass("text-center");
+                $(node).find("td").eq(6).addClass("text-center");
+            }
+        }
+
+
+
+    </script>
+}
+
+
+
+
+
+

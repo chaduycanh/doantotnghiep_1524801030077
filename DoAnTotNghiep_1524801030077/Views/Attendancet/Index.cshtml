@@ -1,0 +1,359 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<link href="~/assets/libs/datepicker/css/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="~/assets/libs/datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right ">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Quản lí</a></li>
+                        <li class="breadcrumb-item active">Điểm danh</li>
+                    </ol>
+                </div>
+                <h4 class="page-title"><small class="fa fa-door-open"></small>Điểm danh</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+</div> <!-- container -->
+<hr />
+<div class="card-box p-2">
+
+    <div class="row pl-12">
+        <!--filter action-->
+        <form class="form-inline">
+            <div class="form-group " >
+                <label style="margin-left:2%" for="Date">Thời gian</label>
+                <input onchange='getselect2congtac(this.value)' type="text" id="Date" style="margin-left:2%" class="form-control small mr-1 mb-1 flatpickr-input" readonly="readonly">
+            </div>
+            <div class="form-group ">
+                <label style="margin-left:2%" for="selectExtraActice">Hoạt động</label>
+                <select id="selectExtraActice" class="small mr-1 mb-1" data-live-search="true" data-style="btn-light"></select>
+            </div>
+        </form>
+    </div><!--end filter action-->
+    <div class="table-responsive">
+        <table class="table table-bordered toggle-circle mb-0 default footable-loaded footable" id="table">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col" width="1">#</th>
+                    <th style="text-align:center" scope="col" class="resizeable">Mã giảng viên</th>
+                    <th style="text-align:center" scope="col" class="resizeable">Tên giảng viên</th>
+                    <th style="text-align:center" scope="col">Điểm danh</th>
+                    @*<th style="text-align:center" scope="col">Ghi chú</th>*@
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <button  type="button" onclick=" Print()" class="btn btn-sm btn-danger waves-effect waves-light mb-1"><i class="fe-lock mb-1"></i>&nbsp;In bảng điểm danh</button>
+
+
+</div>
+
+
+<!--Modal-->
+
+
+@section scripts{
+
+
+    <script type="text/javascript">
+        var Role;
+        //var tablePart;
+        $('#selectExtraActice').change(function () {
+            loadListAtt($('#selectExtraActice').val())
+        });
+        function Print() {
+            var date = $("#Date").val();
+            var code = $("#selectExtraActice").val();
+            debugger;
+            location.href = '@Url.Action("PrintAtt", "Attendancet")?code=' + code + '&date=' + date;
+        }
+        function getselect2congtac(value) {
+            $.ajax({
+                url: '/Attendancet/GetActive',
+                method: 'Post',
+                data: {
+                    'date': value
+                }
+            }).done(function (data) {
+                console.log(data)
+                $("#selectExtraActice").selectpicker('destroy');
+                $("#selectExtraActice").empty();
+                for (let i = 0; i < data.jsData.length; i++) {
+                    $("#selectExtraActice").append(`<option value="${data.jsData[i]["PID"]}">${data.jsData[i]["Content"]}</option>`);
+                }
+                $("#selectExtraActice").selectpicker({
+                    size: 50
+                });
+                $(".dropdown-toggle").css('margin-left', '2%')
+                $(".dropdown-toggle").css('width', '1000%')
+                $(".dropdown-toggle").attr('onchange', 'loadListAtt(this.value)')
+                loadListAtt($('#selectExtraActice').val())
+            });
+
+        }
+        function loadListAtt(id) {
+            $.ajax({
+                url: '/Attendancet/Search',
+                method: 'POST',
+                data: {
+                    'id': id
+                }
+            }).done(function (data) {
+                console.log(data);
+                ShowList(data.jsData);
+            });
+        }
+        //var a = ['Images/1111/9520191820832_1111.jpg;'];
+        $(document).ready(function () {
+            //InitUpload();
+            //select
+            table = InitTable("#table");
+            //getselect2loaigiocongtac("#cateSelect");
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //As January is 0.
+            var yyyy = today.getFullYear();
+            getselect2congtac(dd + "-" + mm + "-" + yyyy)
+            //date
+            var today = new Date();
+            //var startDateTemp = dateFromWeekNumber(year, week);
+            //var startDate =
+            var yyyy = today.getFullYear();
+            var week = getWeekNumber(today);
+            //var weekInput = `<input disabled  type="week" name="week" id="camp-week" class="form-control" value="${yyyy}-W${week[1]}" />`;
+            //$("#week").append(weekInput);
+            $("#Date").flatpickr({
+                enableTime: true,
+                dateFormat: "d-m-Y ",
+                defaultDate: moment(today).format("DD-MM-YYYY"),
+                onChange: function (selectedDates, dateStr, instance) {
+                    instance.close();
+                }
+            });
+            $("#Datea").flatpickr({
+                enableTime: true,
+                dateFormat: "d-m-Y "
+            });
+            //Getall();
+            InitEditor("#content");
+
+        });
+        function Getall() {
+            $.ajax({
+                url: '/Attendancet/GetAll',
+                method: 'POST'
+            }).done(function (data) {
+                console.log(data);
+                ShowList(data.jsData);
+            });
+        }
+        var listUser;
+        function Create() {
+
+            $('#exampleModal').modal('show')
+            $("#divProoffile").show();
+            $("#Save").attr('onclick', 'Save(0)')
+            $("#ApplyDetail").attr('onclick', 'Save(1)')
+        }
+
+        function Save(status) {
+            var fileUpload = $("#proofFile").get(0);
+            var files = fileUpload.files;
+            // Create FormData object
+            var fileData = new FormData();
+            // Looping over all files and add it to FormData object
+            for (var i = 0; i < files.length; i++) {
+                fileData.append('upload', files[i]);
+            }
+            fileData.append('Hour', $("#Hour").val());
+            fileData.append('Content', justTextContent);
+            fileData.append('Location', $("#location").val());
+            fileData.append('KindActive', $("#cateSelect").val());
+            fileData.append('Participant', JSON.stringify($("#Participant").val()));
+            fileData.append('Date', ConvertDate($("#Date").val()));
+            //var formData = new FormData();
+            //formData.append('upload', $("#proofFile")[0].files[0])
+            $.ajax({
+                url: '/PersonalExtratimeActive/Save',
+                method: 'POST',
+                contentType: false,
+                processData: false,
+                data: fileData
+            }).done(function (data) {
+                console.log(data);
+                if (data.returnData == true) {
+                    if (status == 0) {
+                        $('#exampleModal').modal('hide');
+                    }
+                    else {
+                        ResetModal();
+                    }
+                    ShowList(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+        function Edit(id) {
+
+            $("#Save").attr('onclick', 'Update(' + id + ')');
+            $("#divProoffile").hide();
+            $.ajax({
+                method: 'POST',
+                url: '/PersonalExtratimeActive/Edit',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+
+                //console.log(data);
+                var date = moment(data.returnData.Date).format("DD-MM-YYYY");
+                editor.setText(data.returnData.Content);
+
+                $("#Date").val(date);
+                $("#Hour").val(data.returnData.Time);
+                $("#location").val(data.returnData.Location);
+                //console.log(JSON.parse(data.returnData.Participant))
+                //var multiselect = JSON.parse(data.returnData.TeacherCode);
+                $("#cateSelect").val(data.returnData.KindActive).change();
+                $('#exampleModal').modal('show');
+
+                //$("#Hour").val();
+            });
+        }
+
+        function Update(id) {
+            $.ajax({
+                url: '/PersonalExtratimeActive/Update',
+                method: 'POST',
+                data: {
+                    'Date': ConvertDate($("#Date").val()),
+                    'Hour': $("#Hour").val(),
+                    'Content': justTextContent,
+                    'Location': $("#location").val(),
+                    'Id': id,
+                    'KindActive': $("#cateSelect").val(),
+                }
+            }).done(function (data) {
+                //console.log(data);
+                if (data.returnData == true) {
+                    $('#exampleModal').modal('hide');
+                    ShowList(data.jsData);
+                    $.toast({
+                        heading: 'Success',
+                        text: 'Thao tác thành công',
+                        showHideTransition: 'slide',
+                        icon: 'success',
+                        position: 'top-left'
+                    });
+                }
+            });
+        }
+        function Delete(id) {
+            $.ajax({
+                url: '/ExtratimeActiveTemplate/Delete',
+                method: 'POST',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+                if (data.returnData == true) {
+
+                    $('#exampleModal').modal('hide');
+                    $("#table>tbody").empty();
+                    ShowList(data.jsData);
+                    $.toast({
+                        heading: 'Success',
+                        text: 'Thao tác thành công',
+                        showHideTransition: 'slide',
+                        icon: 'success',
+                        position: 'top-left'
+                    });
+                }
+            });
+        }
+        function DiemDanh(id, status) {
+            //alert(status);
+            //alert(id);
+            $.ajax({
+                url: '/Attendancet/DiemDanh',
+                method: 'POST',
+                data: {
+                    'id': id,
+                    'status': status
+                }
+            }).done(function (data) {
+                console.log(data);
+                //ShowList(data.jsData);
+            });
+        }
+        function Check(id) {
+
+        }
+        function ShowList(data) {
+            table.clear().draw();
+            for (let i = 0; i < data.length; i++) {
+                var co = ""; var vang = "";
+                if (data[i]["status"] == "1") {
+                    co = `checked="checked"`;
+                }
+                else if (data[i]["status"] == "0") {
+                    vang = `checked="checked"`;
+                }
+                const node = table.row.add([
+                    i + 1,
+                    data[i]["techercode"],
+                    data[i]["teacherName"],
+                    `     <div style="align-content:center;margin-left:25%" class="row">
+                                        <div class="radio radio-success">
+                                            <input  ${co} onclick="DiemDanh(${data[i]["pid"]},this.value)" type="radio" name="radio-${data[i]["techercode"]}" id="${data[i]["techercode"]}-true" value="1">
+                                            <label for="${data[i]["techercode"]}-true">
+                                                Có
+                                            </label>
+                                        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div style="margin-left:10%" class="col-lg-pull-1 radio radio-danger">
+                                            <input ${vang} onclick="DiemDanh(${data[i]["pid"]},this.value)" type="radio" name="radio-${data[i]["techercode"]}" id="${data[i]["techercode"]}-false" value="0">
+                                            <label for="${data[i]["techercode"]}-false">
+                                                Vắng
+                                            </label>
+                                        </div>
+                                    </div>`
+                ]).draw().node();
+                $(node).find("td").eq(0).addClass("text-center");
+                $(node).find("td").eq(1).addClass("text-center");
+                $(node).find("td").eq(2).addClass("text-center");
+                $(node).find("td").eq(3).addClass("text-center");
+            }
+        }
+
+
+
+    </script>
+}
+
+
+
+
+
+
+
+

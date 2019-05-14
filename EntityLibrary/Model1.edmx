@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DOANTOTNGHIEPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Attendance">
+          <Key>
+            <PropertyRef Name="Pid" />
+          </Key>
+          <Property Name="Pid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TeacherCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="int" />
+          <Property Name="ActiveCode" Type="bigint" />
+          <Property Name="Lock" Type="int" />
+        </EntityType>
+        <EntityType Name="ExtratimeActive">
+          <Key>
+            <PropertyRef Name="PID" />
+          </Key>
+          <Property Name="PID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="Hour" Type="nvarchar" MaxLength="12" />
+          <Property Name="Participant" Type="nvarchar(max)" />
+          <Property Name="Location" Type="nvarchar" MaxLength="258" />
+          <Property Name="KindActive" Type="bigint" />
+        </EntityType>
+        <EntityType Name="PersonalExtratimeActive">
+          <Key>
+            <PropertyRef Name="Pid" />
+          </Key>
+          <Property Name="Pid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Time" Type="nvarchar" MaxLength="8" />
+          <Property Name="Location" Type="nvarchar" MaxLength="512" />
+          <Property Name="Proof" Type="nvarchar" MaxLength="128" />
+          <Property Name="KindActive" Type="bigint" />
+          <Property Name="TeacherCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="Status" Type="int" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Pid" />
+          </Key>
+          <Property Name="Pid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserLogin">
+          <Key>
+            <PropertyRef Name="PID" />
+          </Key>
+          <Property Name="PID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="USER" Type="varchar" MaxLength="24" Nullable="false" />
+          <Property Name="PASSWORD" Type="varchar" MaxLength="128" />
+          <Property Name="TOKEN" Type="varchar" MaxLength="64" />
+          <Property Name="IPLOGIN" Type="varchar" MaxLength="24" />
+          <Property Name="STATUS" Type="bigint" />
+          <Property Name="SALT" Type="varchar" MaxLength="128" />
+          <Property Name="Role" Type="nvarchar" MaxLength="50" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="258" />
+          <Property Name="DayOfBirth" Type="datetime" />
+          <Property Name="Country" Type="nvarchar" MaxLength="258" />
+          <Property Name="CID" Type="nvarchar" MaxLength="128" />
+          <Property Name="Sex" Type="int" />
+          <Property Name="Code" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WorkingDefine">
+          <Key>
+            <PropertyRef Name="Pid" />
+          </Key>
+          <Property Name="Pid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CatePid" Type="bigint" />
+          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Value" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WorkingDefineCate">
+          <Key>
+            <PropertyRef Name="Pid" />
+          </Key>
+          <Property Name="Pid" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NameCate" Type="nvarchar" MaxLength="256" />
+        </EntityType>
+        <EntityContainer Name="DOANTOTNGHIEPModelStoreContainer">
+          <EntitySet Name="Attendance" EntityType="Self.Attendance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExtratimeActive" EntityType="Self.ExtratimeActive" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PersonalExtratimeActive" EntityType="Self.PersonalExtratimeActive" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserLogin" EntityType="Self.UserLogin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WorkingDefine" EntityType="Self.WorkingDefine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WorkingDefineCate" EntityType="Self.WorkingDefineCate" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DOANTOTNGHIEPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Attendance">
+          <Key>
+            <PropertyRef Name="Pid" />
+          </Key>
+          <Property Name="Pid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TeacherCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="ActiveCode" Type="Int64" />
+          <Property Name="Lock" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ExtratimeActive">
+          <Key>
+            <PropertyRef Name="PID" />
+          </Key>
+          <Property Name="PID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Hour" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="Participant" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Location" Type="String" MaxLength="258" FixedLength="false" Unicode="true" />
+          <Property Name="KindActive" Type="Int64" />
+        </EntityType>
+        <EntityType Name="PersonalExtratimeActive">
+          <Key>
+            <PropertyRef Name="Pid" />
+          </Key>
+          <Property Name="Pid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Time" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="Location" Type="String" MaxLength="512" FixedLength="false" Unicode="true" />
+          <Property Name="Proof" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="KindActive" Type="Int64" />
+          <Property Name="TeacherCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Pid" />
+          </Key>
+          <Property Name="Pid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserLogin">
+          <Key>
+            <PropertyRef Name="PID" />
+          </Key>
+          <Property Name="PID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="USER" Type="String" MaxLength="24" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PASSWORD" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="TOKEN" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="IPLOGIN" Type="String" MaxLength="24" FixedLength="false" Unicode="false" />
+          <Property Name="STATUS" Type="Int64" />
+          <Property Name="SALT" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="258" FixedLength="false" Unicode="true" />
+          <Property Name="DayOfBirth" Type="DateTime" Precision="3" />
+          <Property Name="Country" Type="String" MaxLength="258" FixedLength="false" Unicode="true" />
+          <Property Name="CID" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Sex" Type="Int32" />
+          <Property Name="Code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WorkingDefine">
+          <Key>
+            <PropertyRef Name="Pid" />
+          </Key>
+          <Property Name="Pid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CatePid" Type="Int64" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Value" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WorkingDefineCate">
+          <Key>
+            <PropertyRef Name="Pid" />
+          </Key>
+          <Property Name="Pid" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameCate" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="DOANTOTNGHIEPEntities3" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Attendances" EntityType="Self.Attendance" />
+          <EntitySet Name="ExtratimeActives" EntityType="Self.ExtratimeActive" />
+          <EntitySet Name="PersonalExtratimeActives" EntityType="Self.PersonalExtratimeActive" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="UserLogins" EntityType="Self.UserLogin" />
+          <EntitySet Name="WorkingDefines" EntityType="Self.WorkingDefine" />
+          <EntitySet Name="WorkingDefineCates" EntityType="Self.WorkingDefineCate" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DOANTOTNGHIEPModelStoreContainer" CdmEntityContainer="DOANTOTNGHIEPEntities3">
+          <EntitySetMapping Name="Attendances">
+            <EntityTypeMapping TypeName="DOANTOTNGHIEPModel.Attendance">
+              <MappingFragment StoreEntitySet="Attendance">
+                <ScalarProperty Name="Pid" ColumnName="Pid" />
+                <ScalarProperty Name="TeacherCode" ColumnName="TeacherCode" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="ActiveCode" ColumnName="ActiveCode" />
+                <ScalarProperty Name="Lock" ColumnName="Lock" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExtratimeActives">
+            <EntityTypeMapping TypeName="DOANTOTNGHIEPModel.ExtratimeActive">
+              <MappingFragment StoreEntitySet="ExtratimeActive">
+                <ScalarProperty Name="PID" ColumnName="PID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Hour" ColumnName="Hour" />
+                <ScalarProperty Name="Participant" ColumnName="Participant" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="KindActive" ColumnName="KindActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PersonalExtratimeActives">
+            <EntityTypeMapping TypeName="DOANTOTNGHIEPModel.PersonalExtratimeActive">
+              <MappingFragment StoreEntitySet="PersonalExtratimeActive">
+                <ScalarProperty Name="Pid" ColumnName="Pid" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Location" ColumnName="Location" />
+                <ScalarProperty Name="Proof" ColumnName="Proof" />
+                <ScalarProperty Name="KindActive" ColumnName="KindActive" />
+                <ScalarProperty Name="TeacherCode" ColumnName="TeacherCode" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="DOANTOTNGHIEPModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="Pid" ColumnName="Pid" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserLogins">
+            <EntityTypeMapping TypeName="DOANTOTNGHIEPModel.UserLogin">
+              <MappingFragment StoreEntitySet="UserLogin">
+                <ScalarProperty Name="PID" ColumnName="PID" />
+                <ScalarProperty Name="USER" ColumnName="USER" />
+                <ScalarProperty Name="PASSWORD" ColumnName="PASSWORD" />
+                <ScalarProperty Name="TOKEN" ColumnName="TOKEN" />
+                <ScalarProperty Name="IPLOGIN" ColumnName="IPLOGIN" />
+                <ScalarProperty Name="STATUS" ColumnName="STATUS" />
+                <ScalarProperty Name="SALT" ColumnName="SALT" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="DayOfBirth" ColumnName="DayOfBirth" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="CID" ColumnName="CID" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WorkingDefines">
+            <EntityTypeMapping TypeName="DOANTOTNGHIEPModel.WorkingDefine">
+              <MappingFragment StoreEntitySet="WorkingDefine">
+                <ScalarProperty Name="Pid" ColumnName="Pid" />
+                <ScalarProperty Name="CatePid" ColumnName="CatePid" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WorkingDefineCates">
+            <EntityTypeMapping TypeName="DOANTOTNGHIEPModel.WorkingDefineCate">
+              <MappingFragment StoreEntitySet="WorkingDefineCate">
+                <ScalarProperty Name="Pid" ColumnName="Pid" />
+                <ScalarProperty Name="NameCate" ColumnName="NameCate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

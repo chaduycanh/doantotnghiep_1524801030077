@@ -1,0 +1,432 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right ">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Nhập dữ liệu</a></li>
+                        <li class="breadcrumb-item active">Nội dung & qui đổi giờ công tác</li>
+                    </ol>
+                </div>
+                <h4 class="page-title"><small class="fa fa-door-open"></small>Nội dung & qui đổi giờ công tác</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+</div>
+<div class="col-xl-12">
+    <div class="card-box">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a href="#home" data-toggle="tab" aria-expanded="false" class="nav-link active">
+                    Danh mục
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#profile" data-toggle="tab" aria-expanded="true" class="nav-link ">
+                    Chi tiết
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane  show active" id="home">
+                <div class="card-box p-2">
+
+                    <div class="row pl-2">
+                        <!--filter action-->
+                        <form class="form-inline">
+                            <div class="form-group mb-1 mr-1 ">
+                                <button type="button" onclick="CreateCate()" class="btn btn-sm btn-success waves-effect waves-light mb-1"><i class="fa fa-plus mr-1"></i>Thêm danh mục</button>
+                            </div>
+                        </form>
+                    </div><!--end filter action-->
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-1 dt-bootstrap4 no-footer" id="table">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col" width="1">#</th>
+                                    <th scope="col" class="resizeable">Tên danh mục</th>
+                                    <th scope="col" class="resizeable">Chi tiết</th>
+                                    <th style="text-align:center" scope="col">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="tab-pane" id="profile">
+                <div class="card-box p-2">
+
+                    <div class="row pl-2">
+                        <!--filter action-->
+                        <form class="form-inline">
+                            <div class="form-group mb-1 mr-1 ">
+                                <button type="button" onclick="CreateDetail()" class="btn btn-sm btn-success waves-effect waves-light mb-1"><i class="fa fa-plus mr-1"></i>Thêm chi tiết</button>
+                            </div>
+                        </form>
+                    </div><!--end filter action-->
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-1 dt-bootstrap4 no-footer" id="tableDetail">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col" width="1">#</th>
+                                    <th scope="col" class="resizeable">Nội dung</th>
+                                    <th scope="col" class="resizeable">Danh mục</th>
+                                    <th scope="col" class="resizeable">Giờ chuẩn</th>
+                                    <th style="text-align:center" scope="col">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div> <!-- end card-box-->
+</div> <!-- end col -->
+<!--Modal-->
+<div class="modal fade" id="create" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title" id="exampleModalLabel">Danh mục</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="modalEdit" id="modalEdit">
+                    <div class="form-group ">
+                        <label for="Location">Tên danh mục</label>
+                        <input type="text" class="form-control" id="cateName" name="cateName" parsley-trigger="change" placeholder="Nhập tên danh mục..." />
+                    </div>
+                    <div class="form-group">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" id="Save" class="btn btn-primary">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="createDetailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h4 class="modal-title" id="exampleModalLabel">Chi tiết</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form name="modalEdit" id="modalEdit">
+                    <div class="form-group">
+
+                        <label for="content">Nội dung</label>
+                        <div id="content" style="height: 100px;"></div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="cateSelect">Danh mục</label>
+                        <select id="cateSelect"  data-live-search="true" data-style="btn-light">
+                            @*<option>Hot Dog, Fries and a Soda</option>
+                            <option>Burger, Shake and a Smile</option>
+                            <option>Sugar, Spice and all things nice</option>*@
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hourNumber">Giờ chuẩn</label>
+                        <input type="number" id="hourNumber" class="form-control" placeholder="Nhập giờ chuẩn" >
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" id="SaveDetail" class="btn btn-primary">Hoàn thành</button>
+                <button type="button" id="ApplyDetail" class="btn btn-primary">Áp dụng</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        var tableCate;
+        var tableDetail;
+        $("#create").on("hidden.bs.modal", function () {
+            $("#cateName").val("");      
+        });
+        $("#createDetailModal").on("hidden.bs.modal", function () {
+            ResetDetail();
+        });
+        function ResetDetail() {
+            editor.setContents([{ insert: '\n' }]);
+            $("#cateSelect").selectpicker('refresh');
+            $("#hourNumber").val('');
+        }
+        $(document).ready(function () {
+      
+         
+            InitEditor("#content");
+            tableCate = InitTable("#table");
+            tableDetail = InitTable("#tableDetail");
+            GetAllCate();
+            GetAllDetail();
+        });
+        function getselect2danhmucgiocongtac(id) {
+
+            $.ajax({
+                url: '/WorkingHourDefine/GetAllCate',
+                method: 'Post'
+            }).done(function (data) {
+                $('#cateSelect').selectpicker('destroy');
+                $(id).empty();
+                for (let i = 0; i < data.returnData.length; i++) {
+                    $(id).append(`<option value="${data.returnData[i]["Pid"]}">${data.returnData[i]["NameCate"]}</option>`);
+                }
+                $(id).selectpicker();
+                });
+
+        }
+        function GetAllDetail() {
+            $.ajax({
+                url: '/WorkingHourDefine/GetAllDetail',
+                method: 'Post'
+            }).done(function (data) {
+                console.log(data.returnData)
+                ShowListDetail(data.returnData)
+            });
+        }
+        function CreateDetail() {
+
+            $('#createDetailModal').modal('show')
+            $("#SaveDetail").attr('onclick', 'SaveDetail(0)')
+            $("#ApplyDetail").attr('onclick', 'SaveDetail(1)')
+        }
+        function SaveDetail(status) {
+            $.ajax({
+                url: '/WorkingHourDefine/SaveDetail',
+                method: 'Post',
+                data: {
+                    'Value': $("#hourNumber").val(),
+                    'Content': justTextContent,
+                    'CatePid': $("#cateSelect").val()
+                }
+            }).done(function (data) {
+                console.log(data)
+                if (data.returnData == true) {
+                    if (status == 1) {
+                        ResetDetail();
+                    }
+                    else {
+                        $('#createDetailModal').modal('hide');
+                    }
+                    ShowListDetail(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+        function ShowListDetail(data) {
+            tableDetail.clear().draw();
+            for (let i = 0; i < data.length; i++) {
+                const node = tableDetail.row.add([
+                    i + 1,
+                    data[i]["content"],
+                    data[i]["cate"],
+                    data[i]["value"],
+                    ` <center class="pt-1">
+                        <i style="cursor:pointer" onclick='EditDetail(${data[i]["pid"]})' class="fas fa-edit text-danger ml-1" data-toggle="tooltip" data-placement="top" title="Sửa"></i>
+                        <i  style="cursor:pointer" onclick='DeleteDetail(${data[i]["pid"]})' class="fas fa-trash text-danger ml-1" data-toggle="tooltip" data-placement="top" title="Xóa"></i>
+                       </center>`
+                ]).draw().node();
+                $(node).find("td").eq(0).addClass("text-center");
+                //$(node).find("td").eq(1).addClass("text-center");
+                //$(node).find("td").eq(2).addClass("text-center");
+            }
+        }
+        function EditDetail(id) {
+            $("#SaveDetail").attr('onclick', 'UpdateDetail(' + id + ')')
+            $.ajax({
+                method: 'POST',
+                url: '/WorkingHourDefine/EditDetail',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+                console.log(data.returnData);
+                editor.setText(data.returnData.Content);
+                $("#cateSelect").val(data.returnData.CatePid).change();
+                $("#hourNumber").val(data.returnData.Value);
+                $('#createDetailModal').modal('show');
+                //$("#Hour").val();
+            });
+        }
+        function UpdateDetail(id) {
+            $.ajax({
+                url: '/WorkingHourDefine/UpdateDetail',
+                method: 'POST',
+                data: {
+                    'Value': $("#hourNumber").val(),
+                    'Content': justTextContent,
+                    'CatePid': $("#cateSelect").val(),
+                    'Pid': id
+                }
+            }).done(function (data) {
+                if (data.returnData == true) {
+                    $('#createDetailModal').modal('hide');
+                    ShowListDetail(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+        function DeleteDetail(id) {
+            $.ajax({
+                url: '/WorkingHourDefine/DeleteDetail',
+                method: 'POST',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+                if (data.returnData == true) {
+
+                    $('#create').modal('hide');
+                    //$("#table>tbody").empty();
+                    ShowListDetail(data.jsData);
+                    ShowAlert('success','Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error','Thao tác thất bại');
+                }
+            });
+        }
+        function GetAllCate() {
+            $.ajax({
+                url: '/WorkingHourDefine/GetAllCate',
+                method: 'Post'
+            }).done(function (data) {
+                console.log(data)
+                ShowList(data.returnData)
+            });
+        }
+
+        function CreateCate() {
+
+            $('#create').modal('show')
+            $("#Save").attr('onclick', 'SaveCate()')
+        }
+        function SaveCate() {
+            $.ajax({
+                url: '/WorkingHourDefine/SaveCate',
+                method: 'Post',
+                data: {
+                    'NameCate': $("#cateName").val()
+                }
+            }).done(function (data) {
+                console.log(data)
+                if (data.returnData == true) {
+                    $('#create').modal('hide');
+                    ShowList(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+        function ShowList(data) {
+            getselect2danhmucgiocongtac("#cateSelect");
+            tableCate.clear().draw();
+            for (let i = 0; i < data.length; i++) {
+                const node = tableCate.row.add([
+                    i + 1,
+                    data[i]["NameCate"],
+                    `<i style="cursor:pointer" class="fas fa-book"></i>`,
+                    ` <center class="pt-1">
+                        <i style="cursor:pointer" onclick='EditCate(${data[i]["Pid"]})' class="fas fa-edit text-danger ml-1" data-toggle="tooltip" data-placement="top" title="Sửa"></i>
+                        <i  style="cursor:pointer" onclick='DeleteCate(${data[i]["Pid"]})' class="fas fa-trash text-danger ml-1" data-toggle="tooltip" data-placement="top" title="Xóa"></i>
+                       </center>`
+                ]).draw().node();
+                $(node).find("td").eq(0).addClass("text-center");
+                //$(node).find("td").eq(1).addClass("text-center");
+                //$(node).find("td").eq(2).addClass("text-center");
+            }
+        }
+        function EditCate(id) {
+            $("#Save").attr('onclick', 'UpdateCate(' + id + ')')
+            $.ajax({
+                method: 'POST',
+                url: '/WorkingHourDefine/EditCate',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+                console.log(data.returnData);
+                $("#cateName").val(data.returnData.NameCate);            
+                $('#create').modal('show');
+                //$("#Hour").val();
+            });
+        }
+        function UpdateCate(id) {
+            $.ajax({
+                url: '/WorkingHourDefine/UpdateCate',
+                method: 'POST',
+                data: {
+                    'NameCate': $("#cateName").val(),
+                    'Pid': id
+                }
+            }).done(function (data) {
+                if (data.returnData == true) {
+                    $('#create').modal('hide');
+                    ShowList(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+        function DeleteCate(id) {
+            $.ajax({
+                url: '/WorkingHourDefine/DeleteCate',
+                method: 'POST',
+                data: {
+                    'Id': id
+                }
+            }).done(function (data) {
+                if (data.returnData == true) {
+
+                    $('#create').modal('hide');
+                    //$("#table>tbody").empty();
+                    ShowList(data.jsData);
+                    ShowAlert('success', 'Thao tác thành công');
+                }
+                else {
+                    ShowAlert('error', 'Thao tác thất bại');
+                }
+            });
+        }
+
+
+    </script>
+}
+
+

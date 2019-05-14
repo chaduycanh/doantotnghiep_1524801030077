@@ -1,0 +1,297 @@
+﻿
+@{
+    ViewBag.Title = "Chart";
+}
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <div class="page-title-right ">
+                    <ol class="breadcrumb m-0">
+                        <li class="breadcrumb-item"><a href="javascript: void(0);">Quản lí</a></li>
+                        <li class="breadcrumb-item active">Thống kê trực quan</li>
+                    </ol>
+                </div>
+                <h4 class="page-title"><small class="fa fa-door-open"></small>Thống kê trực quan</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+</div> <!-- container -->
+@*<div class="col-12" id="list">
+        @Html.Partial("List")
+    </div>*@
+<!--LIst-->
+
+
+
+<input id="fromDate" hidden />
+<input id="toDate" hidden />
+<input id="weekInput" hidden />
+
+<div class="card-box p-2">
+
+
+    <div class="row pl-2">
+        <!--filter action-->
+        <form class="form-inline">
+            <input onchange="getdataDay()" type="text" id="Date" class="small mr-1 mb-1 form-control flatpickr-input active " placeholder="Nhập ngày" readonly="readonly">
+            <div class="small mr-1 mb-1" id="week">
+
+            </div>
+            <input onchange="getdataMonth()" type="month" id="month" class="small mr-1 mb-1 form-control " placeholder="Nhập tháng" />
+            <input onchange="getdataYear()" type="text" id="year" class="small mr-1 mb-1 form-control " placeholder="Nhập năm" />
+
+
+            @*<input type="number" id="year" class="form-control form-control-sm mb-1 mr-0" placeholder="Nhập năm">*@
+
+            @*@if (Session["UserRole"].ToString() == "Admin")
+                {
+                    <select id="userSelect" data-live-search="true" data-style="btn-light"></select>
+                    <button type="button" onclick="PrintAdmin()" class="btn btn-sm btn-success waves-effect waves-light mb-1"><i class="fa fa-table mr-1"></i>Xuất thống kê</button>
+                }
+                else
+                {
+                    <button type="button" onclick="Print()" class="btn btn-sm btn-success waves-effect waves-light mb-1"><i class="fa fa-table mr-1"></i>Xuất thống kê</button>
+
+                }*@
+        </form>
+    </div><!--end filter action-->
+</div>
+<div class="card-box p-2">
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    @*<div class="table-responsive">
+            <table class="table table-hover mb-1 dt-bootstrap4 no-footer" id="table">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" width="1">#</th>
+                        <th scope="col" class="resizeable">Mã giảng viên</th>
+                        <th scope="col" class="resizeable">Tên giảng viên</th>
+                        <th scope="col" class="resizeable">Tổng vắng</th>
+                        <th scope="col" class="resizeable">Tổng có mặt</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div*@>
+
+</div>
+<script src="~/Scripts/cdn/loader.js"></script>
+@*<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>*@
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawVisualization);
+
+    function drawVisualization(data, tit, haxis) {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable(data);
+
+        var options = {
+            title: tit,
+            vAxis: { title: 'Số người' },
+            hAxis: { title: haxis },
+            seriesType: 'bars'
+        };
+
+        var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+    function getdataDay() {
+        var day = $('#Date').val();
+        if (day == '')
+            return;
+        
+        $('#month').val('');
+        $('#camp-week').val('');
+        $('#year').val('');
+        $.ajax({
+            url: '/Statistica/DataChartDay',
+            method: 'Post',
+            data: {
+                'day': day
+            }
+        }).done(function (data) {
+            console.log(data.jsData);
+            drawVisualization(data.jsData, 'Thống kê giảng viên tham gia hoạt động ngoài giờ ngày ' + day, 'Ngày');
+        });
+
+    }
+    function getdataWeek() {
+       
+        if ($('#camp-week').val() == '') {
+            return;
+        }
+
+        SetTime();
+        $('#Date').val('');
+        $('#month').val('');
+
+        $('#year').val('');
+        $.ajax({
+            url: '/Statistica/DataChartWeek',
+            method: 'Post',
+            data: {
+                'fromDate': $('#fromDate').val(),
+                'toDate': $('#toDate').val()
+            }
+        }).done(function (data) {
+            console.log(data.jsData);
+            drawVisualization(data.jsData, 'Thống kê giảng viên tham gia hoạt động ngoài giờ tuần ' + $("#weekInput").val(), 'Ngày');
+        });
+
+    }
+    function getdataMonth() {
+       
+           
+        var day = $('#Date').val();
+        if (day == '') {
+            return;
+        }
+        $('#camp-week').val('');
+        $('#year').val('');
+        var date = $("#month").val();
+        var year = date.substring(0, 4);
+        var month = date.substring(6, 8);
+        var date = month + "/01/" + year;
+        $.ajax({
+            url: '/Statistica/DataChartMonth',
+            method: 'Post',
+            data: {
+                'datet': date,
+            }
+        }).done(function (data) {
+            console.log(data.jsData);
+            drawVisualization(data.jsData, 'Thống kê giảng viên tham gia hoạt động ngoài giờ tháng ' + month + ' năm ' + year, 'Ngày');
+        });
+
+    }
+    function getdataYear() {
+        var year = $("#year").val();
+        if (year == '') {
+            return;
+        }
+        var day = $('#Date').val();
+        $('#month').val('');
+        $('#camp-week').val('');
+
+        //var date = $("#month").val();
+        //var year = date.substring(0, 4);
+        //var month = date.substring(6, 8);
+        //var date = month + "/01/" + year;
+
+
+        $('#fromDate').val('01/01/' + year);
+        $('#toDate').val('12/31/' + year);
+        $.ajax({
+            url: '/Statistica/DataChartYear',
+            method: 'Post',
+            data: {
+                'fromDate': $('#fromDate').val(),
+                'toDate': $('#toDate').val(),
+            }
+        }).done(function (data) {
+            console.log(data.jsData);
+            drawVisualization(data.jsData, 'Thống kê giảng viên tham gia hoạt động ngoài giờ năm ' + year, 'Tháng');
+        });
+
+    }
+    Date.prototype.addDays = function (days) {
+        var date = new Date(this.valueOf());
+        date.setDate(date.getDate() + days);
+        return date;
+    }
+    function SetTime() {
+        var date = $("#camp-week").val();
+        var year = date.substring(0, 4);
+        var week = date.substring(6, 10);
+        $("#weekInput").val(week);
+        var date = dateFromWeekNumber(year, week)
+        var fromDate = moment(date).format("YYYY-MM-DD");
+        $('#fromDate').val(moment(fromDate).format("YYYY-MM-DD"));
+
+        var mydate = new Date(fromDate);
+
+        var toDate = moment(mydate.addDays(7)).format("YYYY-MM-DD");
+        $('#toDate').val(toDate);
+        //alert(toDate);
+        //alert(newDate.addDays(7));
+        //alert(newDate)
+        //alert(month)
+    }
+
+</script>
+
+
+
+
+@section scripts{
+    <script type="text/javascript">
+            function Print() {
+                var year = $("#year").val();
+                location.href = '@Url.Action("PrintThongKe", "Statistica")?year=' + year;
+            }
+                 function PrintAdmin() {
+                     var year = $("#year").val();
+                     var code = $("#userSelect").val();
+                location.href = '@Url.Action("PrintThongKeAdmin", "Statistica")?year=' + year+'&code='+code;
+            }
+
+
+
+        $(document).ready(function () {
+            table = $("#table").DataTable({
+                paging: true,
+                ordering: true,
+                searching: true,
+                "iDisplayLength": 50,
+            });
+            //var x = [
+            //    ['Ngày', 'Vắng', 'Có mặt'],
+            //    ['2019/01', 12, 100],
+            //    ['2019/02', 45, 150],
+            //    ['2019/03', 13, 160],
+            //    ['2019/04', 30, 110],
+            //    ['2019/05', 20, 80]
+            //];
+            //console.log(x);
+                var today = new Date();
+                var yyyy = today.getFullYear();
+                //$("#year").val(yyyy);
+                $("#Date").flatpickr({
+                    dateFormat: "d-m-Y",
+                    defaultDate: today
+                });
+                var today = new Date();
+                var dd = today.getDate();
+                var mm = today.getMonth() + 1; //As January is 0.
+                var yyyy = today.getFullYear();
+                var week = getWeekNumber(today);
+            var weekInput = `<input onchange='getdataWeek()' type="week" name="week" id="camp-week" class="form-control" value=""/>`;
+                $("#week").append(weekInput);
+            getselect2User("#userSelect");
+            if (parseInt(mm) < 10) {
+                mm = '0' + mm;
+            }
+            //$("#month").val(yyyy + '-' + mm)
+
+                //Getall();
+
+
+            });
+
+
+
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+

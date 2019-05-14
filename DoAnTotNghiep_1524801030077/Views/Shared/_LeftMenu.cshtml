@@ -1,0 +1,154 @@
+﻿@using EntityLibrary;
+@{
+    DOANTOTNGHIEPEntities entity = new DOANTOTNGHIEPEntities();
+    var modal = entity.PersonalExtratimeActives.Where(p => p.Status == 0 || p.Status == null).ToList();
+    int n = 0;
+    if(modal!=null)
+    {
+        n = modal.Count;
+    }
+}
+<div class="left-side-menu">
+
+    <div class="slimscroll-menu">
+        @if (Session["UserRole"].ToString() == "Admin")
+        {
+            <!--- Sidemenu -->
+            <div id="sidebar-menu">
+
+                <ul class="metismenu" id="side-menu">
+
+                    <li class="menu-title">Function</li>
+
+                    <li>
+                        <a href="/Home/Index">
+                            <i class="fe-airplay"></i>
+                            <span class="badge badge-success badge-pill float-right">@n</span>
+                            <span> Dashboards </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="javascript: void(0);">
+                            <i class="fe-file-text"></i>
+                            <span> Nhập dữ liệu </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            <li>
+                                <a href="/ExtratimeActiveTemplate/Index">Hoạt động ngoài giờ</a>
+                            </li>
+                            <li>
+                                <a href="/WorkingHourDefine/Index">Nội dung & qui đổi giờ công tác</a>
+                            </li>
+                            <li>
+                                <a href="/PersonalExtratimeActive/Index">Hoạt động ngoài giờ cá nhân</a>
+                            </li>
+                        </ul>
+
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);">
+                            <i class="fe-bar-chart-2"></i>
+                            <span> Thống kê </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            <li>
+                                <a href="/Statistica/Index">Thống kê cá nhân</a>
+                            </li>
+                            <li>
+                                <a href="/Statistica/Chart">Thống kê trực quan</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);">
+                            <i class="fe-users"></i>
+                            <span> Quản lý </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            <li>
+                                <a href="/Attendancet/Index">Điểm danh</a>
+                            </li>
+                            <li>
+                                <a href="/Assess/Index">Duyệt</a>
+                            </li>
+                            <li>
+                                <a href="/Member/Index">Thành viên</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="menu-title mt-2">WebSetting</li>
+
+
+                </ul>
+
+            </div>
+            <!-- End Sidebar -->
+        }
+        else
+        {
+            <!--- Sidemenu -->
+            <div id="sidebar-menu">
+
+                <ul class="metismenu" id="side-menu">
+
+                    <li class="menu-title">Function</li>
+
+                    <li>
+                        <a href="/Home/Index">
+                            <i class="fe-airplay"></i>
+                            <span class="badge badge-success badge-pill float-right"></span>
+                            <span> Dashboards </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="javascript: void(0);">
+                            <i class="fe-file-text"></i>
+                            <span> Nhập dữ liệu </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            <li>
+                                <a href="/PersonalExtratimeActive/Index">Hoạt động ngoài giờ cá nhân</a>
+                            </li>
+                        </ul>
+
+                    </li>
+                    <li>
+                        <a href="javascript: void(0);">
+                            <i class="fe-bar-chart-2"></i>
+                            <span> Thống kê </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <ul class="nav-second-level" aria-expanded="false">
+                            <li>
+                                <a href="/Statistica/Index">Thống kê cá nhân</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+
+                    <li class="menu-title mt-2">WebSetting</li>
+
+
+                </ul>
+
+            </div>
+            <!-- End Sidebar -->
+        }
+
+
+
+        <div class="clearfix"></div>
+
+    </div>
+    <!-- Sidebar -left -->
+
+</div>
